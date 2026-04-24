@@ -552,27 +552,35 @@ footer {
   <!-- STEP 2: UPLOAD -->
   <div class="upload-section" id="uploadSection">
     <div class="section-title">Step 2 — Upload Proposals</div>
-    <div class="section-sub">Upload up to 3 contractor proposals as PDFs. The AI will compare scope, identify gaps, and generate questions for each contractor.</div>
+    <div class="section-sub">Upload your Floridian proposal first, then add up to 2 competitor proposals.</div>
+
+    <div style="background:#e8f4fa;border:1px solid #8fc5de;border-left:4px solid #153157;padding:14px 20px;margin-bottom:20px;font-size:13px;color:#153157;">
+      <strong style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;">Required:</strong> You must upload the <strong>Floridian proposal</strong> in Slot 1 before submitting.
+    </div>
 
     <div class="upload-grid">
-      <div class="upload-box" id="box1">
+      <div class="upload-box" id="box1" style="border:2px solid #153157;">
         <input type="file" accept=".pdf" onchange="fileSelected(this, 'box1', 'hint1')">
-        <div class="ub-icon">📄</div>
-        <div class="ub-name">Proposal #1</div>
-        <div class="ub-hint" id="hint1">Click or drag PDF here</div>
+        <div class="ub-icon">🏠</div>
+        <div class="ub-name" style="color:#153157;">Floridian Proposal</div>
+        <div class="ub-hint" id="hint1" style="color:#153157;font-weight:500;">Required — upload here first</div>
       </div>
       <div class="upload-box" id="box2">
         <input type="file" accept=".pdf" onchange="fileSelected(this, 'box2', 'hint2')">
         <div class="ub-icon">📄</div>
-        <div class="ub-name">Proposal #2</div>
+        <div class="ub-name">Competitor #1</div>
         <div class="ub-hint" id="hint2">Click or drag PDF here</div>
       </div>
       <div class="upload-box" id="box3">
         <input type="file" accept=".pdf" onchange="fileSelected(this, 'box3', 'hint3')">
         <div class="ub-icon">📄</div>
-        <div class="ub-name">Proposal #3 (optional)</div>
+        <div class="ub-name">Competitor #2 (optional)</div>
         <div class="ub-hint" id="hint3">Click or drag PDF here</div>
       </div>
+    </div>
+
+    <div id="floridianWarning" style="display:none;color:#6b1a1a;font-size:12px;font-weight:500;margin-bottom:12px;padding:10px 14px;background:#fdeaea;border:1px solid #e8b4b4;">
+      Please upload the Floridian proposal in Slot 1 before analyzing.
     </div>
 
     <button class="analyze-btn" id="analyzeBtn" onclick="analyzeProposals()" disabled>
@@ -664,7 +672,10 @@ function fileSelected(input, boxId, hintId) {
   uploadedFiles[boxId] = file;
   document.getElementById(boxId).classList.add('filled');
   document.getElementById(hintId).textContent = file.name;
-  document.getElementById('analyzeBtn').disabled = Object.keys(uploadedFiles).length < 1;
+  // Only enable analyze if Floridian slot (box1) is filled
+  const floridianUploaded = !!uploadedFiles['box1'];
+  document.getElementById('analyzeBtn').disabled = !floridianUploaded;
+  document.getElementById('floridianWarning').style.display = 'none';
 }
 
 function showTab(id, el) {
@@ -703,6 +714,12 @@ async function readFileAsBase64(file) {
 }
 
 async function analyzeProposals() {
+  // Enforce Floridian proposal requirement
+  if (!uploadedFiles['box1']) {
+    document.getElementById('floridianWarning').style.display = 'block';
+    return;
+  }
+
   const btn = document.getElementById('analyzeBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="dots"><span></span><span></span><span></span></span>&nbsp; Analyzing...';
