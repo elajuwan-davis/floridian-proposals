@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Floridian Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:#f7f8f9;color:#1a1f2e;min-height:100vh}
+header{background:#153157;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:72px;box-shadow:0 2px 20px rgba(15,34,64,0.3)}
+.logo-wrap{display:flex;align-items:center;gap:14px}
+.logo-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:600;letter-spacing:0.22em;color:#fff;text-transform:uppercase}
+.logo-est{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:#B6DAEA;margin-top:3px}
+.logo-text{display:flex;flex-direction:column;line-height:1}
+.admin-badge{background:#B6DAEA;color:#153157;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:5px 12px;border-radius:3px}
+.login-wrap{background:#fff;border:1px solid #dde2ec;border-top:4px solid #153157;padding:48px;max-width:440px;margin:60px auto}
+.login-title{font-family:'Playfair Display',serif;font-size:28px;color:#153157;margin-bottom:8px}
+.login-sub{font-size:13px;color:#6b7a99;margin-bottom:28px}
+.field-label{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b7a99;margin-bottom:6px;display:block}
+.field-input{width:100%;border:1px solid #dde2ec;padding:12px 14px;font-family:'Barlow',sans-serif;font-size:14px;color:#1a1f2e;background:#f7f8f9;outline:none;margin-bottom:20px;border-radius:2px}
+.field-input:focus{border-color:#153157;background:#fff}
+.btn-primary{background:#153157;color:#fff;border:none;padding:14px 32px;font-family:'Barlow',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-radius:2px;width:100%}
+.error-msg{background:#fdeaea;color:#6b1a1a;padding:10px 14px;font-size:12px;margin-bottom:16px;border:1px solid #e8b4b4;display:none}
+.main{padding:48px;max-width:900px}
+.admin-panel{display:none}
+.page-title{font-family:'Playfair Display',serif;font-size:32px;color:#153157;margin-bottom:6px}
+.page-sub{font-size:13px;color:#6b7a99;margin-bottom:36px}
+.card{background:#fff;border:1px solid #dde2ec;padding:32px;margin-bottom:24px}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#153157;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #153157}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-full{grid-column:1 / -1}
+.upload-box{border:2px dashed #dde2ec;padding:32px;text-align:center;cursor:pointer;position:relative;transition:all 0.2s;border-radius:2px;margin-bottom:20px}
+.upload-box:hover,.upload-box.filled{border-style:solid;border-color:#153157;background:#e8f4fa}
+.upload-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ub-icon{font-size:28px;margin-bottom:8px}
+.ub-name{font-size:13px;font-weight:600;color:#1a1f2e;margin-bottom:4px}
+.ub-hint{font-size:12px;color:#6b7a99}
+.btn-generate{background:#153157;color:#fff;border:none;padding:16px 40px;font-family:'Barlow',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.btn-generate:disabled{background:#6b7a99;cursor:not-allowed}
+.link-result{background:#153157;padding:24px 28px;margin-top:20px;display:none}
+.link-eyebrow{font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#B6DAEA;margin-bottom:8px}
+.link-url{font-size:13px;color:#fff;word-break:break-all;margin-bottom:14px;font-family:monospace;background:rgba(255,255,255,0.08);padding:10px 14px}
+.link-btns{display:flex;gap:10px}
+.btn-copy{background:#B6DAEA;color:#153157;border:none;padding:9px 20px;font-family:'Barlow',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.btn-copy.copied{background:#4caf7d;color:white}
+.projects-table{width:100%;border-collapse:collapse;font-size:13px}
+.projects-table th{background:#f7f8f9;padding:10px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;color:#6b7a99;border-bottom:2px solid #dde2ec}
+.projects-table td{padding:12px 14px;border-bottom:1px solid #dde2ec;color:#3d4860}
+.projects-table tr:hover td{background:#e8f4fa}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:#1a6b4a}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-wrap">
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" fill="#153157"/><path d="M10 8 L28 8 L28 14 L16 14 L16 18 L25 18 L25 23 L16 23 L16 30 L10 30 Z" fill="#B6DAEA"/></svg>
+    <div class="logo-text"><div class="logo-name">FLORIDIAN</div><div class="logo-est">Est'd 1998</div></div>
+  </div>
+  <div class="admin-badge">Admin Portal</div>
+</header>
+<div id="loginWrap" class="login-wrap">
+  <div class="login-title">Admin Login</div>
+  <div class="login-sub">Enter your Floridian admin password to access the proposal tool.</div>
+  <div class="error-msg" id="loginError">Incorrect password. Please try again.</div>
+  <form onsubmit="handleLogin(event)" action="#" method="post" autocomplete="on">
+    <input type="text" name="username" value="floridian-admin" style="display:none" autocomplete="username">
+    <label class="field-label">Password</label>
+    <input class="field-input" type="password" id="passwordInput" name="password" placeholder="Enter password" autocomplete="current-password">
+    <button type="submit" class="btn-primary">Sign In</button>
+  </form>
+</div>
+<div class="main">
+<div class="admin-panel" id="adminPanel">
+  <div class="page-title">Proposal Tool Admin</div>
+  <div class="page-sub">Generate a pre-loaded client link for each project. Your Floridian proposal will be locked in Slot 1.</div>
+  <div class="card">
+    <div class="card-title">Generate New Client Link</div>
+    <div class="form-grid">
+      <div class="form-group"><label class="field-label">Project Address</label><input class="field-input" type="text" id="genAddress" placeholder="3170 Munroe Dr, Miami FL" oninput="checkReady()" style="margin-bottom:0"></div>
+      <div class="form-group"><label class="field-label">Client Name</label><input class="field-input" type="text" id="genClient" placeholder="The Jaar Group" style="margin-bottom:0"></div>
+      <div class="form-group form-full"><label class="field-label">Project Type</label><input class="field-input" type="text" id="genType" placeholder="Pool & Spa Construction" style="margin-bottom:0"></div>
+    </div>
+    <div style="height:16px"></div>
+    <label class="field-label">Upload Floridian Proposal PDF</label>
+    <div class="upload-box" id="adminUploadBox">
+      <input type="file" accept=".pdf" onchange="proposalSelected(this)">
+      <div class="ub-icon">📄</div>
+      <div class="ub-name" id="adminFileName">Click or drag your Floridian proposal PDF here</div>
+      <div class="ub-hint">This will be locked in Slot 1 for the client</div>
+    </div>
+    <button class="btn-generate" id="generateBtn" onclick="generateLink()" disabled>Generate Client Link</button>
+    <div class="link-result" id="linkResult">
+      <div class="link-eyebrow">Client Link Ready — Copy and Send</div>
+      <div class="link-url" id="generatedUrl"></div>
+      <div class="link-btns">
+        <button class="btn-copy" id="copyLinkBtn" onclick="copyLink()">Copy Link</button>
+        <button class="btn-copy" style="background:rgba(255,255,255,0.15);color:white" onclick="openLink()">Open Preview</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Active Projects</div>
+    <table class="projects-table"><thead><tr><th>Project</th><th>Client</th><th>Created</th><th>Status</th><th>Link</th></tr></thead><tbody id="projectsBody"></tbody></table>
+  </div>
+</div>
+</div>
+<script>
+const ADMIN_PASSWORD='floridian1998';
+const SHEET='https://script.google.com/macros/s/AKfycbwA9boWTiXgQ1bFhYXRMCce_WHoJ0TOddJH5mXox3DL6RTa-zfaCyNEgb1N6VjNQBCTMw/exec';
+let selectedFile=null,projects=[];
+try{projects=JSON.parse(localStorage.getItem('floridian_projects')||'[]');}catch(e){}
+function handleLogin(e){e.preventDefault();if(document.getElementById('passwordInput').value===ADMIN_PASSWORD){document.getElementById('loginWrap').style.display='none';document.getElementById('adminPanel').style.display='block';renderProjects();}else{document.getElementById('loginError').style.display='block';}}
+function proposalSelected(i){const f=i.files[0];if(!f)return;selectedFile=f;document.getElementById('adminUploadBox').classList.add('filled');document.getElementById('adminFileName').textContent=f.name;checkReady();}
+function checkReady(){document.getElementById('generateBtn').disabled=!(document.getElementById('genAddress').value.trim()&&selectedFile);}
+async function generateLink(){const btn=document.getElementById('generateBtn');btn.disabled=true;btn.textContent='Preparing...';const address=document.getElementById('genAddress').value.trim(),client=document.getElementById('genClient').value.trim(),type=document.getElementById('genType').value.trim()||'Pool & Spa Construction';try{const base64=await new Promise((r,j)=>{const rd=new FileReader();rd.onload=()=>r(rd.result.split(',')[1]);rd.onerror=j;rd.readAsDataURL(selectedFile);});const id='fp_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);projects.unshift({id,address,client,type,fileName:selectedFile.name,proposalBase64:base64,created:new Date().toISOString()});localStorage.setItem('floridian_projects',JSON.stringify(projects));const url=window.location.href.replace('admin-portal.html','index.html')+'?project='+id;document.getElementById('generatedUrl').textContent=url;document.getElementById('linkResult').style.display='block';try{fetch(SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({address,client,projectType:type,projectId:id,fileName:selectedFile.name,proposals:[{name:'Floridian',score:'TBD'}],gaps:[]})});}catch(e){}renderProjects();btn.disabled=false;btn.textContent='Generate Another Link';}catch(err){btn.disabled=false;btn.textContent='Generate Client Link';alert('Error: '+err.message);}}
+function copyLink(){const url=document.getElementById('generatedUrl').textContent;navigator.clipboard.writeText(url).then(()=>{const b=document.getElementById('copyLinkBtn');b.textContent='Copied!';b.classList.add('copied');setTimeout(()=>{b.textContent='Copy Link';b.classList.remove('copied');},2000);});}
+function openLink(){window.open(document.getElementById('generatedUrl').textContent,'_blank');}
+function renderProjects(){const t=document.getElementById('projectsBody');if(!projects.length){t.innerHTML='<tr><td colspan="5" style="color:#6b7a99;font-style:italic;padding:16px">No projects yet.</td></tr>';return;}t.innerHTML=projects.slice(0,20).map(p=>{const d=new Date(p.created).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),u=window.location.href.replace('admin-portal.html','index.html')+'?project='+p.id;return'<tr><td><strong>'+p.address+'</strong></td><td>'+(p.client||'—')+'</td><td>'+d+'</td><td><span class="status-dot"></span>Active</td><td><a href="'+u+'" target="_blank" style="color:#153157;font-weight:600">Open →</a></td></tr>';}).join('');}
+</script>
+</body>
+</html>
