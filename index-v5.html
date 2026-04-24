@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flōridian | Proposal Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --obsidian:#153157;
+  --obsidian-dark:#0e2240;
+  --sky:#B6DAEA;
+  --sky-pale:#e8f4fa;
+  --sky-mid:#8fc5de;
+  --concrete:#E6E7E7;
+  --concrete-dark:#cecece;
+  --white:#FFFFFF;
+  --off-white:#f5f6f8;
+  --ink:#153157;
+  --ink-soft:#2a3d5c;
+  --ink-muted:#6b7a99;
+  --success:#1a6b4a;
+  --success-pale:#e6f4ee;
+  --warning:#7a5a1a;
+  --warning-pale:#fdf3e0;
+  --danger:#6b1a1a;
+  --danger-pale:#fdeaea;
+  --border:#d8dde8;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:var(--concrete);color:var(--ink);min-height:100vh;font-size:13px}
+
+/* HEADER — Concrete background so Obsidian logo shows naturally */
+header{
+  background:var(--concrete);
+  border-bottom:3px solid var(--obsidian);
+  padding:0 48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:80px;
+  position:sticky;
+  top:0;
+  z-index:200;
+  box-shadow:0 2px 16px rgba(21,49,87,0.1);
+}
+.logo-wrap{display:flex;align-items:center;gap:16px}
+.logo-f-mark{height:48px;width:auto;display:block;}
+.header-divider{width:1px;height:32px;background:var(--concrete-dark);margin:0 4px}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.header-project{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--obsidian)}
+.header-meta{font-size:11px;color:var(--ink-muted);letter-spacing:0.04em}
+
+/* HERO — Obsidian with wave pattern */
+.hero{
+  background-color:var(--obsidian);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40'%3E%3Cpath d='M0 20 C25 5 75 5 100 20 C125 35 175 35 200 20' fill='none' stroke='%23B6DAEA' stroke-width='2.5' opacity='0.15'/%3E%3C/svg%3E");
+  background-size:200px 40px;
+  padding:56px 48px 48px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--sky) 0%,rgba(182,218,234,0.2) 100%)}
+.hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:0.28em;text-transform:uppercase;color:var(--sky);margin-bottom:14px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--white);line-height:1.1;margin-bottom:8px}
+.hero-sub{font-size:14px;font-weight:300;color:rgba(182,218,234,0.85);margin-bottom:32px}
+.hero-chips{display:flex;gap:32px;flex-wrap:wrap}
+.hero-chip{display:flex;flex-direction:column;gap:3px}
+.chip-label{font-size:9px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:rgba(182,218,234,0.6)}
+.chip-value{font-size:13px;font-weight:500;color:var(--white)}
+
+/* TABS */
+.tabs-bar{background:var(--white);border-bottom:2px solid var(--border);padding:0 48px;display:flex;position:sticky;top:80px;z-index:150;overflow-x:auto}
+.tab{padding:18px 20px;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--ink-muted);transition:all 0.2s;white-space:nowrap}
+.tab:hover{color:var(--obsidian)}
+.tab.active{color:var(--obsidian);border-bottom-color:var(--obsidian)}
+
+.main{padding:40px 48px;max-width:1360px}
+.section{display:none}
+.section.active{display:block}
+
+/* SCORE CARDS */
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px}
+.score-card{background:var(--white);border:1px solid var(--border);padding:28px;position:relative;overflow:hidden;transition:box-shadow 0.2s}
+.score-card:hover{box-shadow:0 6px 28px rgba(21,49,87,0.12)}
+.score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.score-card.floridian::before{background:var(--obsidian)}
+.score-card.comp-a::before{background:var(--sky-mid)}
+.score-card.comp-b::before{background:var(--concrete-dark)}
+.sc-label{font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:4px}
+.sc-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:22px}
+.sc-score{font-size:60px;font-weight:700;line-height:1;margin-bottom:4px}
+.score-card.floridian .sc-score{color:var(--obsidian)}
+.score-card.comp-a .sc-score{color:var(--sky-mid)}
+.score-card.comp-b .sc-score{color:#8a9ab0}
+.sc-score-label{font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px}
+.sc-bar-bg{background:var(--concrete);height:3px;border-radius:2px;margin-bottom:18px;overflow:hidden}
+.sc-bar{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+.score-card.floridian .sc-bar{background:var(--obsidian)}
+.score-card.comp-a .sc-bar{background:var(--sky-mid)}
+.score-card.comp-b .sc-bar{background:#8a9ab0}
+.tag-grid{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px}
+.tag.g{background:var(--success-pale);color:var(--success)}
+.tag.r{background:var(--danger-pale);color:var(--danger)}
+.tag.y{background:var(--warning-pale);color:var(--warning)}
+
+/* VERDICT */
+.verdict{background-color:var(--obsidian);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40'%3E%3Cpath d='M0 20 C25 5 75 5 100 20 C125 35 175 35 200 20' fill='none' stroke='%23B6DAEA' stroke-width='2' opacity='0.1'/%3E%3C/svg%3E");background-size:200px 40px;padding:36px 40px;position:relative;overflow:hidden}
+.verdict::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--sky)}
+.verdict-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:var(--sky);margin-bottom:10px}
+.verdict-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--white);font-weight:300;margin-bottom:14px;line-height:1.3;max-width:720px}
+.verdict-body{font-size:13px;font-weight:300;color:rgba(182,218,234,0.85);line-height:1.8;max-width:760px}
+
+/* GAP CARDS */
+.page-header{margin-bottom:28px}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--obsidian);margin-bottom:4px}
+.page-sub{font-size:12px;color:var(--ink-muted);line-height:1.6}
+.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.gap-card{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--concrete-dark);padding:22px 24px}
+.gap-card.critical{border-left-color:#a83232}
+.gap-card.notable{border-left-color:#b8861a}
+.gap-severity{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px}
+.gap-card.critical .gap-severity{color:var(--danger)}
+.gap-card.notable .gap-severity{color:var(--warning)}
+.gap-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--ink);margin-bottom:10px;font-weight:400}
+.gap-body{font-size:12px;color:var(--ink-soft);line-height:1.7}
+
+/* QUESTIONS */
+.q-intro{background-color:var(--obsidian);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40'%3E%3Cpath d='M0 20 C25 5 75 5 100 20 C125 35 175 35 200 20' fill='none' stroke='%23B6DAEA' stroke-width='2' opacity='0.1'/%3E%3C/svg%3E");background-size:200px 40px;padding:32px 36px;margin-bottom:28px;position:relative}
+.q-intro::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sky) 0%,transparent 100%)}
+.q-intro-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:var(--sky);margin-bottom:8px}
+.q-intro-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--white);font-weight:300;margin-bottom:10px}
+.q-intro-body{font-size:13px;font-weight:300;color:rgba(182,218,234,0.85);line-height:1.7;max-width:680px}
+.q-contractor-block{margin-bottom:32px}
+.q-contractor-name{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--obsidian);padding:10px 0;border-bottom:2px solid var(--obsidian);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.copy-all-btn{background:var(--obsidian);color:var(--white);border:none;padding:7px 16px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.copy-all-btn.copied{background:var(--success)}
+.q-list{display:flex;flex-direction:column;gap:8px}
+.q-item{background:var(--white);border:1px solid var(--border);padding:14px 18px;display:flex;align-items:flex-start;gap:14px}
+.q-num{font-size:20px;font-weight:700;color:var(--sky-mid);line-height:1;min-width:28px;margin-top:2px}
+.q-text{flex:1;font-size:12px;color:var(--ink-soft);line-height:1.6}
+.q-copy-btn{background:none;border:1px solid var(--border);color:var(--ink-muted);padding:4px 12px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.q-copy-btn:hover{border-color:var(--obsidian);color:var(--obsidian)}
+.q-copy-btn.copied{background:var(--success-pale);color:var(--success);border-color:var(--success)}
+
+/* UPLOAD */
+.upload-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.upload-box{background:var(--white);border:2px dashed var(--border);padding:36px 20px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;border-radius:2px}
+.upload-box:hover{border-color:var(--obsidian);background:var(--sky-pale)}
+.upload-box.filled{border-style:solid;border-color:var(--obsidian);background:var(--sky-pale)}
+.upload-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ub-icon{font-size:28px;margin-bottom:10px}
+.ub-name{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);margin-bottom:4px}
+.ub-hint{font-size:11px;color:var(--ink-muted)}
+.analyze-btn{background:var(--obsidian);color:var(--white);border:none;padding:16px 44px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.analyze-btn:hover{background:#1a3d6b}
+.analyze-btn:disabled{background:var(--ink-muted);cursor:not-allowed}
+
+/* FORM */
+.project-form{background:var(--white);border:1px solid var(--border);border-top:4px solid var(--sky);padding:32px 36px;margin-bottom:32px}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--obsidian);margin-bottom:6px;font-weight:400}
+.form-sub{font-size:12px;color:var(--ink-muted);margin-bottom:24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-muted)}
+.form-input{border:1px solid var(--border);padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:12px;color:var(--ink);background:var(--off-white);outline:none;transition:border-color 0.2s;border-radius:2px}
+.form-input:focus{border-color:var(--obsidian);background:var(--white)}
+.start-btn{background:var(--obsidian);color:var(--white);border:none;padding:14px 36px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.upload-section{display:none}
+.upload-section.visible{display:block}
+.tabs-bar-inner{background:var(--white);border-bottom:1px solid var(--border);display:flex;margin-bottom:28px;overflow-x:auto}
+.tab-inner{padding:14px 18px;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;border-bottom:3px solid transparent;color:var(--ink-muted);transition:all 0.2s;white-space:nowrap}
+.tab-inner:hover{color:var(--obsidian)}
+.tab-inner.active{color:var(--obsidian);border-bottom-color:var(--obsidian)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.ai-output{background:var(--white);border:1px solid var(--border);border-top:4px solid var(--obsidian);padding:32px;margin-top:24px}
+.ai-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.ai-badge{background:var(--obsidian);color:var(--white);font-size:8px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;padding:4px 10px;border-radius:2px}
+.ai-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ink);font-weight:400}
+.ai-text{font-size:13px;line-height:1.8;color:var(--ink-soft);white-space:pre-wrap}
+.dots{display:inline-flex;gap:5px;align-items:center}
+.dots span{width:6px;height:6px;background:var(--sky);border-radius:50%;animation:pulse 1.2s infinite}
+.dots span:nth-child(2){animation-delay:0.2s}
+.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+
+/* FOOTER */
+footer{
+  background-color:var(--obsidian-dark);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='30'%3E%3Cpath d='M0 15 C25 3 75 3 100 15 C125 27 175 27 200 15' fill='none' stroke='%23B6DAEA' stroke-width='1.5' opacity='0.08'/%3E%3C/svg%3E");
+  background-size:200px 30px;
+  color:rgba(182,218,234,0.4);
+  text-align:center;
+  padding:28px 48px;
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  margin-top:60px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;color:rgba(182,218,234,0.6);letter-spacing:0.1em;text-transform:none}
+@media(max-width:900px){
+  header{padding:0 20px}
+  .hero{padding:32px 20px}
+  .main{padding:24px 20px}
+  .tabs-bar{padding:0 20px}
+  .score-grid,.gap-grid,.upload-grid,.form-grid{grid-template-columns:1fr}
+  .hero-title{font-size:32px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <img class="logo-f-mark" src="data:image/jpeg;base64,LOGO_F_MARK" alt="Flōridian">
+  </div>
+  <div class="header-right">
+    <div class="header-project">Proposal Comparison Tool</div>
+    <div class="header-meta" id="headerMeta">Enter project details to begin</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Pool &amp; Spa · Hardscape · Outdoor Living</div>
+  <div class="hero-title">Proposal Review</div>
+  <div class="hero-sub">Your Private Oasis Awaits — Let’s make sure you choose the right partner to build it.</div>
+  <div class="hero-chips">
+    <div class="hero-chip"><span class="chip-label">Powered by</span><span class="chip-value">Flōridian · Estd 1998</span></div>
+    <div class="hero-chip"><span class="chip-label">Proposals</span><span class="chip-value">Up to 3 at once</span></div>
+    <div class="hero-chip"><span class="chip-label">Output</span><span class="chip-value">Gaps + Questions to Ask</span></div>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <div class="tab active" onclick="showMainTab('upload-view',this)">Upload &amp; Analyze</div>
+  <div class="tab" onclick="showMainTab('results-view',this)">Results</div>
+</div>
+
+<div class="main">
+  <div class="section active" id="upload-view">
+    <div class="project-form" id="projectForm">
+      <div class="form-title">Step 1 — Enter Your Project Details</div>
+      <div class="form-sub">This information will appear at the top of your comparison report.</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Project Address</label><input class="form-input" id="projAddress" type="text" placeholder="123 Main St, Miami, FL"></div>
+        <div class="form-group"><label class="form-label">Client Name</label><input class="form-input" id="projClient" type="text" placeholder="The Smith Family"></div>
+        <div class="form-group"><label class="form-label">Project Type</label><input class="form-input" id="projType" type="text" placeholder="Pool &amp; Spa Construction"></div>
+      </div>
+      <button class="start-btn" onclick="startProject()">Continue to Upload →</button>
+    </div>
+    <div class="upload-section" id="uploadSection">
+      <div class="page-header"><div class="page-title">Step 2 — Upload Proposals</div><div class="page-sub">Upload your Flōridian proposal first, then add up to 2 competitors.</div></div>
+      <div style="background:var(--sky-pale);border:1px solid var(--sky-mid);border-left:4px solid var(--obsidian);padding:14px 20px;margin-bottom:20px;font-size:12px;color:var(--obsidian);"><strong style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;">Required:</strong> Upload the <strong>Flōridian proposal</strong> in Slot 1 first.</div>
+      <div class="upload-grid">
+        <div class="upload-box" id="box1" style="border:2px solid var(--obsidian);"><input type="file" accept=".pdf" onchange="fileSelected(this,'box1','hint1')"><div class="ub-icon">🏠</div><div class="ub-name" style="color:var(--obsidian)">Flōridian Proposal</div><div class="ub-hint" id="hint1" style="color:var(--obsidian);font-weight:600">Required — upload here first</div></div>
+        <div class="upload-box" id="box2"><input type="file" accept=".pdf" onchange="fileSelected(this,'box2','hint2')"><div class="ub-icon">📄</div><div class="ub-name">Competitor #1</div><div class="ub-hint" id="hint2">Click or drag PDF here</div></div>
+        <div class="upload-box" id="box3"><input type="file" accept=".pdf" onchange="fileSelected(this,'box3','hint3')"><div class="ub-icon">📄</div><div class="ub-name">Competitor #2 (optional)</div><div class="ub-hint" id="hint3">Click or drag PDF here</div></div>
+      </div>
+      <div id="floridianWarning" style="display:none;color:#6b1a1a;font-size:11px;font-weight:600;margin-bottom:12px;padding:10px 14px;background:#fdeaea;border:1px solid #e8b4b4;">Please upload the Flōridian proposal in Slot 1 first.</div>
+      <button class="analyze-btn" id="analyzeBtn" onclick="analyzeProposals()" disabled>Analyze Proposals</button>
+    </div>
+  </div>
+  <div class="section" id="results-view">
+    <div class="tabs-bar-inner">
+      <div class="tab-inner active" onclick="showInnerTab('overview2',this)">Overview</div>
+      <div class="tab-inner" onclick="showInnerTab('gaps2',this)">Scope Gaps</div>
+      <div class="tab-inner" onclick="showInnerTab('questions2',this)">Questions to Ask</div>
+      <div class="tab-inner" onclick="showInnerTab('fullanalysis2',this)">Full Analysis</div>
+    </div>
+    <div class="tab-content active" id="overview2"><div class="score-grid" id="scoreGrid"></div><div class="verdict" id="verdictBox" style="display:none"><div class="verdict-eyebrow">Objective Assessment</div><div class="verdict-title" id="verdictTitle"></div><div class="verdict-body" id="verdictBody"></div></div></div>
+    <div class="tab-content" id="gaps2"><div class="gap-grid" id="gapGrid"></div></div>
+    <div class="tab-content" id="questions2"><div class="q-intro"><div class="q-intro-eyebrow">Armed for the Follow-Up</div><div class="q-intro-title">Questions to Send Back to Each Contractor</div><div class="q-intro-body">Drawn directly from scope gaps. Copy and send to each contractor.</div></div><div id="questionsContainer"></div></div>
+    <div class="tab-content" id="fullanalysis2"><div class="ai-output"><div class="ai-header"><span class="ai-badge">AI Analysis</span><span class="ai-title">Complete Scope Review</span></div><div class="ai-text" id="fullAiText"></div></div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-tagline">Your Private Oasis Awaits</div>
+  Flōridian · Estd 1998 · Hardscape &amp; Pool Construction · Miami to Jupiter, FL
+</footer>
+
+<script>
+const uploadedFiles={};let projectData={};const SHEET='https://script.google.com/macros/s/AKfycbwA9boWTiXgQ1bFhYXRMCce_WHoJ0TOddJH5mXox3DL6RTa-zfaCyNEgb1N6VjNQBCTMw/exec';
+window.addEventListener('DOMContentLoaded',function(){const params=new URLSearchParams(window.location.search);const projectId=params.get('project');if(!projectId)return;let projects=[];try{projects=JSON.parse(localStorage.getItem('floridian_projects')||'[]');}catch(e){}const project=projects.find(p=>p.id===projectId);if(!project)return;projectData={address:project.address,client:project.client,type:project.type};document.getElementById('headerMeta').textContent=project.address+(project.client?' · '+project.client:'');document.getElementById('projectForm').style.display='none';document.getElementById('uploadSection').classList.add('visible');const box1=document.getElementById('box1');box1.classList.add('filled');box1.style.pointerEvents='none';box1.querySelector('.ub-icon').textContent='🔒';document.getElementById('hint1').textContent=project.fileName;uploadedFiles['box1']={preloaded:true,name:project.fileName,base64:project.proposalBase64};document.getElementById('analyzeBtn').disabled=false;});
+function showMainTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');}
+function showInnerTab(id,el){document.querySelectorAll('.tab-inner').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');}
+function startProject(){const address=document.getElementById('projAddress').value.trim();if(!address){alert('Please enter a project address.');return;}projectData={address,client:document.getElementById('projClient').value.trim(),type:document.getElementById('projType').value.trim()};document.getElementById('headerMeta').textContent=address+(projectData.client?' · '+projectData.client:'');document.getElementById('projectForm').style.display='none';document.getElementById('uploadSection').classList.add('visible');}
+function fileSelected(input,boxId,hintId){const file=input.files[0];if(!file)return;uploadedFiles[boxId]=file;document.getElementById(boxId).classList.add('filled');document.getElementById(hintId).textContent=file.name;document.getElementById('analyzeBtn').disabled=!uploadedFiles['box1'];document.getElementById('floridianWarning').style.display='none';}
+function copyQ(btn){navigator.clipboard.writeText(btn.previousElementSibling.textContent.trim()).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);});}
+function copyAll(listId,btn){const items=document.querySelectorAll('#'+listId+' .q-text');const text=Array.from(items).map((el,i)=>(i+1)+'. '+el.textContent.trim()).join('\n\n');navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy All';btn.classList.remove('copied');},2500);});}
+async function analyzeProposals(){if(!uploadedFiles['box1']){document.getElementById('floridianWarning').style.display='block';return;}const btn=document.getElementById('analyzeBtn');btn.disabled=true;btn.innerHTML='<span class="dots"><span></span><span></span><span></span></span>&nbsp; Analyzing...';const fileEntries=Object.entries(uploadedFiles);const contentParts=[];try{for(let i=0;i<fileEntries.length;i++){const[boxId,fileOrObj]=fileEntries[i];let b64,name;if(fileOrObj&&fileOrObj.preloaded){b64=fileOrObj.base64;name=fileOrObj.name;}else{b64=await new Promise((r,j)=>{const rd=new FileReader();rd.onload=()=>r(rd.result.split(',')[1]);rd.onerror=j;rd.readAsDataURL(fileOrObj);});name=fileOrObj.name;}const label=i===0?'Floridian (Proposal 1)':'Competitor Proposal '+i;contentParts.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}});contentParts.push({type:'text',text:label+' ('+name+').'});}contentParts.push({type:'text',text:`You are a construction scope analyst for Floridian, a Florida pool and hardscape company. Analyze proposals for: "${projectData.address}"${projectData.client?', Client: '+projectData.client:''}. Return ONLY valid JSON: {"proposals":[{"name":"string","score":85,"tags":[{"label":"text","type":"g"}]}],"verdict":{"title":"string","body":"string"},"gaps":[{"severity":"critical","affectsProposals":"string","title":"string","body":"string"}],"questions":[{"contractor":"string","questions":["string"]}],"fullAnalysis":"string"}. Tag types: g=green/positive, r=red/risk, y=yellow/partial. Score 0-100. 4-6 questions per contractor.`});const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:contentParts}]})});const data=await resp.json();const rawText=data.content?.map(b=>b.text||'').join('')||'';let parsed;try{parsed=JSON.parse(rawText.replace(/```json|```/g,'').trim());}catch(e){document.getElementById('fullAiText').textContent=rawText;document.getElementById('results-view').classList.add('active');document.getElementById('upload-view').classList.remove('active');document.querySelectorAll('.tab')[1].classList.add('active');document.querySelectorAll('.tab')[0].classList.remove('active');showInnerTab('fullanalysis2',document.querySelectorAll('.tab-inner')[3]);btn.disabled=false;btn.textContent='Analyze Again';return;}renderResults(parsed);}catch(err){document.getElementById('fullAiText').textContent='Analysis failed.\n\n'+err.message;}btn.disabled=false;btn.textContent='Re-Analyze';}
+function renderResults(data){const sg=document.getElementById('scoreGrid');sg.innerHTML='';const cc=['floridian','comp-a','comp-b'];(data.proposals||[]).forEach((p,i)=>{const th=(p.tags||[]).map(t=>`<span class="tag ${t.type}">${t.label}</span>`).join('');sg.innerHTML+=`<div class="score-card ${cc[i]||'comp-b'}"><div class="sc-label">Proposal ${i+1}</div><div class="sc-name">${p.name}</div><div class="sc-score">${p.score}</div><div class="sc-score-label">Scope Completeness</div><div class="sc-bar-bg"><div class="sc-bar" style="width:${p.score}%"></div></div><div class="tag-grid">${th}</div></div>`;});if(data.verdict){document.getElementById('verdictTitle').textContent=data.verdict.title;document.getElementById('verdictBody').textContent=data.verdict.body;document.getElementById('verdictBox').style.display='block';}const gg=document.getElementById('gapGrid');gg.innerHTML='';(data.gaps||[]).forEach(g=>{gg.innerHTML+=`<div class="gap-card ${g.severity}"><div class="gap-severity">${g.severity==='critical'?'Critical':'Notable'} · ${g.affectsProposals}</div><div class="gap-title">${g.title}</div><div class="gap-body">${g.body}</div></div>`;});const qc=document.getElementById('questionsContainer');qc.innerHTML='';(data.questions||[]).forEach((cn,ci)=>{const lid='qlist-'+ci;const qi=cn.questions.map((q,i)=>`<div class="q-item"><div class="q-num">0${i+1}</div><div class="q-text">${q}</div><button class="q-copy-btn" onclick="copyQ(this)">Copy</button></div>`).join('');qc.innerHTML+=`<div class="q-contractor-block"><div class="q-contractor-name"><span>${cn.contractor}</span><button class="copy-all-btn" onclick="copyAll('${lid}',this)">Copy All</button></div><div class="q-list" id="${lid}">${qi}</div></div>`;});document.getElementById('fullAiText').textContent=data.fullAnalysis||'';try{fetch(SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({address:projectData.address,client:projectData.client,proposals:(data.proposals||[]).map(p=>({name:p.name,score:p.score})),gaps:(data.gaps||[]).map(g=>({severity:g.severity,title:g.title}))})});}catch(e){}document.getElementById('upload-view').classList.remove('active');document.getElementById('results-view').classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab')[1].classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>
