@@ -1,6 +1,4 @@
-export const config = {
-  runtime: 'edge',
-};
+export const config = { runtime: 'edge' };
 
 export default async function handler(req) {
   if (req.method === 'OPTIONS') {
@@ -23,7 +21,22 @@ export default async function handler(req) {
   }
 
   try {
-    const formData = await req.formData();
+    const { blobUrl, filename } = await req.json();
+    if (!blobUrl) {
+      return new Response(JSON.stringify({ error: 'blobUrl is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      });
+    }
+
+    const blobResp = await fetch(blobUrl);
+    if (!blobResp.ok) {
+      throw new Error('Failed to fetch blob: ' + blobResp.status);
+    }
+    const fileBlob = await blobResp.blob();
+
+    const formData = new FormData();
+    formData.append('file', fileBlob, filename || 'proposal.pdf');
 
     const response = await fetch('https://api.anthropic.com/v1/files', {
       method: 'POST',
