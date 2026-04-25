@@ -219,13 +219,18 @@ async function uploadPDF(file){
   status.innerHTML='<span class="dots"><span></span><span></span><span></span></span> Uploading PDF to AI engine...';
   status.style.display='block';
   try{
-    // Use our Vercel proxy — no CORS issues, API key stays server-side
-    const formData=new FormData();
-    formData.append('file',file,file.name);
-    formData.append('purpose','assistants');
+    // Step 1: Upload PDF directly to Vercel Blob (no body size limit)
+    const { upload } = await import('https://esm.sh/@vercel/blob@1/client');
+    const blob = await upload(file.name, file, {
+      access: 'public',
+      handleUploadUrl: '/api/upload-token',
+      contentType: 'application/pdf',
+    });
+    // Step 2: Tell our server to forward the blob to Anthropic Files API
     const resp=await fetch('/api/upload-pdf',{
       method:'POST',
-      body:formData
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({blobUrl:blob.url,filename:file.name})
     });
     const data=await resp.json();
     if(resp.ok&&data.id){
