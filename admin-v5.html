@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flōridian | Admin Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--obsidian:#153157;--obsidian-dark:#0e2240;--sky:#B6DAEA;--sky-pale:#e8f4fa;--sky-mid:#8fc5de;--concrete:#E6E7E7;--concrete-dark:#cecece;--white:#FFFFFF;--off-white:#f5f6f8;--ink:#153157;--ink-soft:#2a3d5c;--ink-muted:#6b7a99;--success:#1a6b4a;--success-pale:#e6f4ee;--danger:#6b1a1a;--danger-pale:#fdeaea;--warning:#7a5a1a;--warning-pale:#fdf3e0;--border:#d8dde8}
+body{font-family:'Montserrat',sans-serif;background:var(--concrete);color:var(--ink);min-height:100vh;font-size:13px}
+header{background:var(--concrete);border-bottom:3px solid var(--obsidian);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:88px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(21,49,87,0.1)}
+.logo-wrap{display:flex;align-items:center;gap:14px}
+.logo-f{height:52px;width:auto;display:block;mix-blend-mode:multiply}
+.logo-text{display:flex;flex-direction:column;justify-content:center;gap:3px}
+.logo-name{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;letter-spacing:0.22em;color:var(--obsidian);text-transform:uppercase;line-height:1}
+.logo-est{font-size:9px;font-weight:600;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-muted)}
+.header-right{display:flex;align-items:center;gap:16px}
+.admin-badge{background:var(--obsidian);color:var(--white);font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:6px 14px;border-radius:2px}
+.logout-btn{background:none;border:1px solid var(--concrete-dark);color:var(--ink-muted);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:6px 14px;cursor:pointer;border-radius:2px}
+.logout-btn:hover{border-color:var(--obsidian);color:var(--obsidian)}
+.main{padding:48px;max-width:900px;margin:0 auto}
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 88px);padding:48px}
+.login-card{background:var(--white);border:1px solid var(--border);border-top:4px solid var(--obsidian);padding:48px;width:100%;max-width:420px}
+.login-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--obsidian);margin-bottom:6px}
+.login-sub{font-size:11px;color:var(--ink-muted);margin-bottom:32px;line-height:1.6}
+.field-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field-label{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-muted)}
+.field-input{border:1px solid var(--border);padding:11px 14px;font-family:'Montserrat',sans-serif;font-size:12px;color:var(--ink);background:var(--off-white);outline:none;transition:border-color 0.2s;border-radius:2px;width:100%}
+.field-input:focus{border-color:var(--obsidian);background:var(--white)}
+.remember-row{display:flex;align-items:center;gap:8px;margin-bottom:24px}
+.remember-row input[type=checkbox]{width:14px;height:14px;accent-color:var(--obsidian);cursor:pointer}
+.remember-row label{font-size:11px;color:var(--ink-muted);cursor:pointer}
+.login-btn{background:var(--obsidian);color:var(--white);border:none;padding:13px;width:100%;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.login-btn:hover{background:#1a3d6b}
+.login-error{background:var(--danger-pale);border:1px solid #e8b4b4;color:var(--danger);font-size:11px;font-weight:600;padding:10px 14px;margin-bottom:16px;display:none;border-radius:2px}
+.admin-screen{display:none}
+.page-header{margin-bottom:36px}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--obsidian);margin-bottom:4px}
+.page-sub{font-size:12px;color:var(--ink-muted);line-height:1.6}
+.card{background:var(--white);border:1px solid var(--border);border-top:4px solid var(--sky);padding:32px 36px;margin-bottom:28px}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--obsidian);margin-bottom:6px;font-weight:400}
+.card-sub{font-size:11px;color:var(--ink-muted);margin-bottom:24px;line-height:1.6}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.upload-box{border:2px dashed var(--border);padding:36px 20px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;border-radius:2px;background:var(--off-white);margin-bottom:20px}
+.upload-box:hover{border-color:var(--obsidian);background:var(--sky-pale)}
+.upload-box.filled{border-style:solid;border-color:var(--obsidian);background:var(--sky-pale)}
+.upload-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:28px;margin-bottom:10px}
+.upload-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:4px}
+.upload-hint{font-size:11px;color:var(--ink-muted)}
+.upload-status{display:none;margin-top:12px;padding:12px 16px;border-radius:2px;font-size:11px;font-weight:600}
+.upload-status.uploading{background:var(--sky-pale);border:1px solid var(--sky-mid);color:var(--obsidian)}
+.upload-status.success{background:var(--success-pale);border:1px solid #7ab89a;color:var(--success)}
+.upload-status.error{background:var(--danger-pale);border:1px solid #e8b4b4;color:var(--danger)}
+.generate-btn{background:var(--obsidian);color:var(--white);border:none;padding:14px 36px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.generate-btn:hover{background:#1a3d6b}
+.generate-btn:disabled{background:var(--ink-muted);cursor:not-allowed}
+.link-output{background:var(--sky-pale);border:1px solid var(--sky-mid);border-left:4px solid var(--obsidian);padding:18px 20px;margin-top:20px;display:none}
+.link-label{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--obsidian);margin-bottom:8px}
+.link-url{font-size:12px;color:var(--ink-soft);word-break:break-all;margin-bottom:12px;font-family:monospace}
+.link-actions{display:flex;gap:10px}
+.copy-btn,.open-btn{border:none;padding:8px 18px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.copy-btn{background:var(--obsidian);color:var(--white)}
+.copy-btn.copied{background:var(--success)}
+.open-btn{background:none;border:1px solid var(--obsidian);color:var(--obsidian)}
+.log-table{width:100%;border-collapse:collapse}
+.log-table th{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-muted);padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);background:var(--off-white)}
+.log-table td{font-size:11px;color:var(--ink-soft);padding:12px;border-bottom:1px solid var(--border)}
+.log-table tr:last-child td{border-bottom:none}
+.log-table tr:hover td{background:var(--sky-pale)}
+.empty-log{text-align:center;padding:32px;color:var(--ink-muted);font-size:12px}
+.dots{display:inline-flex;gap:4px;align-items:center;vertical-align:middle}
+.dots span{width:5px;height:5px;background:var(--sky-mid);border-radius:50%;animation:pulse 1.2s infinite}
+.dots span:nth-child(2){animation-delay:0.2s}
+.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+footer{background-color:var(--obsidian-dark);color:rgba(182,218,234,0.4);text-align:center;padding:24px 48px;font-size:9px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;margin-top:60px}
+@media(max-width:768px){header{padding:0 20px}.main{padding:24px 20px}.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-wrap">
+    <img class="logo-f" src="assets/Floridian%20-%20F%20-%20Obsidian%20(3).png" alt="Flōridian">
+    <div class="logo-text">
+      <div class="logo-name">Flōridian</div>
+      <div class="logo-est">Estd 1998</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="admin-badge" id="adminBadge" style="display:none">Admin Portal</span>
+    <button class="logout-btn" id="logoutBtn" style="display:none" onclick="logout()">Sign Out</button>
+  </div>
+</header>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-eyebrow">Flōridian · Internal</div>
+    <div class="login-title">Admin Portal</div>
+    <div class="login-sub">Sign in to generate client proposal comparison links.</div>
+    <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
+    <div class="field-group">
+      <label class="field-label">Password</label>
+      <input class="field-input" type="password" id="passwordInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="rememberMe" checked>
+      <label for="rememberMe">Remember me on this device</label>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+  </div>
+</div>
+
+<div class="admin-screen" id="adminScreen">
+  <div class="main">
+    <div class="page-header">
+      <div class="page-title">Proposal Link Generator</div>
+      <div class="page-sub">Upload a Flōridian proposal PDF. It uploads directly to the AI — no file size limits.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Generate Client Link</div>
+      <div class="card-sub">Fill in project details and upload the Flōridian proposal. The PDF uploads to the AI engine instantly — handles any size.</div>
+      <div class="form-grid">
+        <div class="field-group"><label class="field-label">Project Address</label><input class="field-input" id="projAddress" type="text" placeholder="123 Main St, Miami, FL"></div>
+        <div class="field-group"><label class="field-label">Client Name</label><input class="field-input" id="projClient" type="text" placeholder="The Smith Family"></div>
+        <div class="field-group"><label class="field-label">Project Type</label><input class="field-input" id="projType" type="text" placeholder="Pool &amp; Spa Construction"></div>
+        <div class="field-group"><label class="field-label">Sales Rep (optional)</label><input class="field-input" id="projRep" type="text" placeholder="Your name"></div>
+      </div>
+      <div class="upload-box" id="proposalBox">
+        <input type="file" accept=".pdf" id="proposalFile" onchange="fileSelected()">
+        <div class="upload-icon" id="uploadIcon">📄</div>
+        <div class="upload-label">Flōridian Proposal PDF</div>
+        <div class="upload-hint" id="uploadHint">Click or drag to upload — any file size</div>
+      </div>
+      <div class="upload-status" id="uploadStatus"></div>
+      <button class="generate-btn" id="generateBtn" onclick="generateLink()" disabled>Generate Client Link →</button>
+      <div class="link-output" id="linkOutput">
+        <div class="link-label">Client Link — Ready to Share</div>
+        <div class="link-url" id="linkUrl"></div>
+        <div class="link-actions">
+          <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy Link</button>
+          <button class="open-btn" onclick="openLink()">Open in New Tab</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top-color:var(--obsidian)">
+      <div class="card-title">Recent Links</div>
+      <div class="card-sub">Links generated on this device.</div>
+      <div id="logContainer"></div>
+    </div>
+  </div>
+</div>
+
+<footer>Flōridian · Estd 1998 · Admin Portal · Internal Use Only</footer>
+
+<script>
+const CORRECT_PW='floridian1998';
+const PW_KEY='floridian_admin_pw';
+const LOG_KEY='floridian_link_log';
+
+window.addEventListener('DOMContentLoaded',function(){
+  if(localStorage.getItem(PW_KEY)===CORRECT_PW)showAdmin();
+});
+
+function doLogin(){
+  const pw=document.getElementById('passwordInput').value;
+  const remember=document.getElementById('rememberMe').checked;
+  if(pw===CORRECT_PW){
+    if(remember)localStorage.setItem(PW_KEY,pw);
+    else localStorage.removeItem(PW_KEY);
+    document.getElementById('loginError').style.display='none';
+    showAdmin();
+  }else{
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('passwordInput').value='';
+    document.getElementById('passwordInput').focus();
+  }
+}
+
+function showAdmin(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('adminScreen').style.display='block';
+  document.getElementById('adminBadge').style.display='inline-block';
+  document.getElementById('logoutBtn').style.display='inline-block';
+  renderLog();
+}
+
+function logout(){
+  localStorage.removeItem(PW_KEY);
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('adminScreen').style.display='none';
+  document.getElementById('adminBadge').style.display='none';
+  document.getElementById('logoutBtn').style.display='none';
+  document.getElementById('passwordInput').value='';
+}
+
+let currentFileId=null;
+let currentFileName=null;
+let currentFileSizeMB=0;
+
+function fileSelected(){
+  const file=document.getElementById('proposalFile').files[0];
+  if(!file)return;
+  currentFileName=file.name;
+  currentFileSizeMB=(file.size/1024/1024).toFixed(1);
+  currentFileId=null;
+  document.getElementById('generateBtn').disabled=true;
+  document.getElementById('uploadHint').textContent=file.name+' ('+currentFileSizeMB+'MB)';
+  document.getElementById('proposalBox').classList.add('filled');
+  document.getElementById('uploadIcon').textContent='⏳';
+  // Upload to Anthropic Files API
+  uploadToAnthropicFiles(file);
+}
+
+async function uploadToAnthropicFiles(file){
+  const status=document.getElementById('uploadStatus');
+  status.className='upload-status uploading';
+  status.innerHTML='<span class="dots"><span></span><span></span><span></span></span> Uploading PDF to AI engine...';
+  status.style.display='block';
+  try{
+    const formData=new FormData();
+    formData.append('file',file,file.name);
+    formData.append('purpose','assistants');
+    const resp=await fetch('https://api.anthropic.com/v1/files',{
+      method:'POST',
+      headers:{
+        'anthropic-version':'2023-06-01',
+        'anthropic-beta':'files-api-2025-04-14'
+      },
+      body:formData
+    });
+    const data=await resp.json();
+    if(resp.ok&&data.id){
+      currentFileId=data.id;
+      status.className='upload-status success';
+      status.innerHTML='✓ PDF uploaded successfully — File ID: '+data.id;
+      document.getElementById('uploadIcon').textContent='✅';
+      checkForm();
+    }else{
+      throw new Error(data.error?.message||'Upload failed');
+    }
+  }catch(e){
+    status.className='upload-status error';
+    status.innerHTML='⚠️ Upload failed: '+e.message;
+    document.getElementById('uploadIcon').textContent='❌';
+    currentFileId=null;
+  }
+}
+
+function checkForm(){
+  const addr=document.getElementById('projAddress').value.trim();
+  document.getElementById('generateBtn').disabled=!(addr&&currentFileId);
+}
+
+document.querySelectorAll('.field-input').forEach(el=>el.addEventListener('input',checkForm));
+
+function generateLink(){
+  if(!currentFileId){alert('Please upload a PDF first.');return;}
+  const address=document.getElementById('projAddress').value.trim();
+  if(!address){alert('Please enter a project address.');return;}
+  const client=document.getElementById('projClient').value.trim();
+  const type=document.getElementById('projType').value.trim();
+  const rep=document.getElementById('projRep').value.trim();
+
+  // Build URL with file_id and metadata as params
+  const params=new URLSearchParams({
+    file_id:currentFileId,
+    file_name:currentFileName,
+    address:address
+  });
+  if(client)params.set('client',client);
+  if(type)params.set('type',type);
+  if(rep)params.set('rep',rep);
+
+  const url=window.location.origin+'/index.html?'+params.toString();
+  document.getElementById('linkUrl').textContent=url;
+  document.getElementById('linkOutput').style.display='block';
+  document.getElementById('copyBtn').textContent='Copy Link';
+  document.getElementById('copyBtn').classList.remove('copied');
+
+  // Log it
+  let log=[];
+  try{log=JSON.parse(localStorage.getItem(LOG_KEY)||'[]');}catch(e){}
+  log.unshift({address,client,type,rep,fileName:currentFileName,sizeMB:currentFileSizeMB,fileId:currentFileId,url,createdAt:new Date().toISOString()});
+  if(log.length>50)log=log.slice(0,50);
+  try{localStorage.setItem(LOG_KEY,JSON.stringify(log));}catch(e){}
+  renderLog();
+}
+
+function copyLink(){
+  const url=document.getElementById('linkUrl').textContent;
+  navigator.clipboard.writeText(url).then(()=>{
+    document.getElementById('copyBtn').textContent='Copied!';
+    document.getElementById('copyBtn').classList.add('copied');
+    setTimeout(()=>{
+      document.getElementById('copyBtn').textContent='Copy Link';
+      document.getElementById('copyBtn').classList.remove('copied');
+    },2500);
+  });
+}
+
+function openLink(){
+  window.open(document.getElementById('linkUrl').textContent,'_blank');
+}
+
+function renderLog(){
+  const container=document.getElementById('logContainer');
+  if(!container)return;
+  let log=[];
+  try{log=JSON.parse(localStorage.getItem(LOG_KEY)||'[]');}catch(e){}
+  if(log.length===0){
+    container.innerHTML='<div class="empty-log">No links generated yet on this device.</div>';
+    return;
+  }
+  const rows=log.map(p=>{
+    const date=new Date(p.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    return `<tr><td>${date}</td><td>${p.address}</td><td>${p.client||'—'}</td><td>${p.type||'—'}</td><td>${p.sizeMB||'?'}MB</td><td><a href="${p.url}" target="_blank" style="color:var(--obsidian);font-weight:600;font-size:10px;letter-spacing:0.1em">Open →</a></td></tr>`;
+  }).join('');
+  container.innerHTML=`<table class="log-table"><thead><tr><th>Date</th><th>Address</th><th>Client</th><th>Type</th><th>Size</th><th>Link</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+</script>
+</body>
+</html>
