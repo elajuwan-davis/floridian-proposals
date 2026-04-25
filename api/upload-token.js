@@ -1,19 +1,13 @@
 import { handleUpload } from '@vercel/blob/client';
 
-export const config = { runtime: 'edge' };
-
-export default async function handler(req) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const body = await req.json();
     const jsonResponse = await handleUpload({
-      body,
+      body: req.body,
       request: req,
       onBeforeGenerateToken: async () => ({
         allowedContentTypes: ['application/pdf'],
@@ -23,14 +17,8 @@ export default async function handler(req) {
         console.log('Blob uploaded:', blob.url);
       },
     });
-    return new Response(JSON.stringify(jsonResponse), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json(jsonResponse);
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(400).json({ error: error.message });
   }
 }
