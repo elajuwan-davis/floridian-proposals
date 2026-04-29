@@ -220,7 +220,7 @@ async function uploadPDF(file){
   status.style.display='block';
   try{
     // Step 1: Upload PDF directly to Vercel Blob (no body size limit)
-    const { upload } = await import('https://esm.sh/@vercel/blob@1/client');
+    const { upload } = await import('https://esm.run/@vercel/blob@0.27.3/client');
     const blob = await upload(file.name, file, {
       access: 'public',
       handleUploadUrl: '/api/upload-token',
